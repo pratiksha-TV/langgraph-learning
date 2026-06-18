@@ -7,3 +7,4 @@ class WorkflowState(TypedDict):
     answer: str
     retry_count: int
     error: str
+    approval: str

@@ -1,9 +1,15 @@
-def retrieve_node(state):
+from state.workflow_state import WorkflowState
+
+
+def retrieve_node(state: WorkflowState):
 
     print("RETRIEVE NODE")
-    print("Retry Count:", state["retry_count"])
 
-    if state["retry_count"] == 0:
+    retry_count = state.get("retry_count", 0)
+
+    print("Retry Count:", retry_count)
+
+    if retry_count == 0:
 
         print("Returning Error")
 
