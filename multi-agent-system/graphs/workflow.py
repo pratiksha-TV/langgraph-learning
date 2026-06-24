@@ -1,55 +1,71 @@
 from langgraph.graph import StateGraph
 from langgraph.graph import END
 
-from state.agent_state import AgentState
+from state.rag_state import AgenticRAGState
 
-from agents.supervisor import supervisor_agent
-from agents.math_agent import math_agent
-from agents.research_agent import research_agent
+from agents.planner_agent import planner_agent
+from agents.retriever_agent import retriever_agent
+from agents.validator_agent import validator_agent
 
-from graphs.router import route_agent
+from graphs.router import route_after_planner
+from agents.approval_agent import approval_agent
+from langgraph.checkpoint.memory import MemorySaver
 
 
 builder = StateGraph(
-    AgentState
+    AgenticRAGState
 )
 
 builder.add_node(
-    "supervisor",
-    supervisor_agent
+    "planner",
+    planner_agent
 )
 
 builder.add_node(
-    "math",
-    math_agent
+    "retriever",
+    retriever_agent
 )
 
 builder.add_node(
-    "research",
-    research_agent
+    "validator",
+    validator_agent
+)
+
+builder.add_node(
+    "approval",
+    approval_agent
 )
 
 builder.set_entry_point(
-    "supervisor"
+    "planner"
 )
 
 builder.add_conditional_edges(
-    "supervisor",
-    route_agent,
+    "planner",
+    route_after_planner,
     {
-        "math": "math",
-        "research": "research"
+        "retriever": "retriever",
+        "validator": "validator"
     }
 )
 
 builder.add_edge(
-    "math",
-    END
+    "retriever",
+    "validator"
 )
 
 builder.add_edge(
-    "research",
+    "validator",
+    "approval"
+)
+
+builder.add_edge(
+    "approval",
     END
 )
 
-graph = builder.compile()
+memory = MemorySaver()
+
+graph = builder.compile(
+    checkpointer=memory
+)

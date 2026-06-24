@@ -1,9 +1,11 @@
-from state.agent_state import AgentState
+from state.rag_state import AgenticRAGState
 
 
-def route_agent(state: AgentState):
+def route_after_planner(
+    state: AgenticRAGState
+):
 
-    if state["agent_type"] == "math":
-        return "math"
+    if state["need_retrieval"]:
+        return "retriever"
 
-    return "research"
+    return "validator"

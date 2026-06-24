@@ -1,0 +1,7 @@
+Spring Boot is a Java framework used for building applications quickly.
+
+Kafka is a distributed event streaming platform.
+
+LangGraph is a framework for building stateful AI workflows.
+
+LangChain helps developers build LLM applications.
