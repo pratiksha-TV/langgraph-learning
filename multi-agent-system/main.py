@@ -10,8 +10,11 @@ question = input(
 result = graph.invoke(
     {
         "question": question,
+        "retry_count": 0,
+        "error": "",
         "need_retrieval": False,
-        "documents": "",
+        "retriever_result": "",
+        "web_result": "",
         "answer": "",
         "sources": [],
         "approval": ""
